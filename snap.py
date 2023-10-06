@@ -1,12 +1,12 @@
-#! /usr/bin/env python3.7
+#! /usr/bin/python3.11
 """
-ONTAP REST API Python Sample Scripts
+ONTAP 9.13.1 REST API Python Sample Scripts
 Author: Vish Hulikal
 Purpose: Script to create snapshot using the netapp_ontap library.
          It will also create a policy for the snapshot.
          It will also create a schedule for the policy.
 
-Usage: snap.py [-h] -c CLUSTER -v VOLUME_NAME -s SNAPSHOT_NAME -vs VSERVER_NAME
+Usage: python3.11 snap.py [-h] -c CLUSTER -v VOLUME_NAME -s SNAPSHOT_NAME -vs VSERVER_NAME
                     -sc SCHEDULE_NAME, -p POLICY_NAME, [-u API_USER] [-p API_PASS]
 create_snap.py: The following arguments are required: -c/--cluster, -v/--volume_name
                 -s/--snapshot_name -vs/--vserver_name, -sc/--schedule_name, -sp/--policy_name
