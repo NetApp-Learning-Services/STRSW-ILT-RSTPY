@@ -1,7 +1,7 @@
-#! /usr/bin/env python3.7
+#! /usr/bin/python3.11
 
 """
-ONTAP 9.7 REST API Python Client Library Scripts
+ONTAP 9.13.1 REST API Python Client Library Scripts
 uthor: Vish Hulikal
 This script performs the following:
         - Create a volume
@@ -10,7 +10,7 @@ This script performs the following:
         - Resize a volume to a new (bigger) size
         - Delete a volume
 
-usage: python3.7 volume.py [-h] -c CLUSTER -v VOLUME_NAME -vs VSERVER_NAME -a AGGR_NAME -ma MOVE_AGGR_NAME
+usage: python3.11 volume.py [-h] -c CLUSTER -v VOLUME_NAME -vs VSERVER_NAME -a AGGR_NAME -ma MOVE_AGGR_NAME
                -rs VOLUME_RESIZE -s VOLUME_SIZE [-u API_USER] [-p API_PASS]
 The following arguments are required: -c/--cluster, -v/--volume_name, -vs/--vserver_name,
                 -a/--aggr_name, -ma/--move_aggr_name, -rs/--volume_resize, -s/--volume_size
