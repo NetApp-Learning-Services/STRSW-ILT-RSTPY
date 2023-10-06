@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#! /usr/local/bin/python3.11
 
 """
 Purpose: Script to create sn SVM by using the netapp_ontap library.
@@ -6,9 +6,9 @@ Purpose: Script to create sn SVM by using the netapp_ontap library.
          It will also create a DNS Domain, NFS Server and NFS Export.
 Author: Vish Hulikal
 Usage: nfs.py [-h] -c CLUSTER -a AGGR_NAME, -n NODE_NAME, -vs VSERVER_NAME, -v VOLUME_NAME, -ip DATA_LIF, -g GATEWAY, -d DOMAIN, -s SEVER_IP,
-                    -nm NET_MASK -se NFS_SERVER, -sh EXPORT_PATH, [-u API_USER] [-p API_PASS]
-python3.7 nfs.py: -c cluster -a aggr_name, -vs/--vserver_name, -ip/--ip_address, -g/--gateway_ip, -d/--domain,
-                -s/--server_ip, -nm/--net_mask -se/--nfs_server, -sh/--ex_path
+                    -nm NET_MASK -se NFS_SERVER, -sh EXPORT_PATH, -ep EXPORT_POLICY, [-u API_USER] [-p API_PASS]
+python3.11 nfs.py: -c cluster -a aggr_name, -vs/--vserver_name, -ip/--ip_address, -g/--gateway_ip, -d/--domain,
+                -s/--server_ip, -nm/--net_mask -se/--nfs_server, -sh/--ex_path -ep/--ex_policy
 """
 
 import argparse
@@ -45,8 +45,8 @@ def make_volume(volume_name: str, vserver_name: str, aggr_name: str, net_path: s
         'svm': {'name': vserver_name},
         'aggregates': [{'name': aggr_name }],
         'size': volume_size,
-        'nas': {'security_style': 'unix', 'path': net_path},
-        'space_guarantee': 'volume' 
+        'nas': {'security_style': 'unix', 'path': net_path, 'unix_permissions': 4777, 'export_policy.name': 'Default','junction_parent.name': volume_name},
+        'space_guarantee': 'volume'
     }
 
     volume = Volume(**data)
@@ -85,7 +85,7 @@ def create_data_interface(vserver_name: str, interface_name: str, node_name: str
 
 def create_route(vserver_name: str, net_gateway_ip: str) -> None:
     """Creates a network route"""
-    """The default destination will be set to "0.0.0.0/0" for IPv4 gateway addresses""" 
+    """The default destination will be set to "0.0.0.0/0" for IPv4 gateway addresses"""
 
     data = {
         'gateway': net_gateway_ip,
@@ -142,19 +142,20 @@ def create_nfs_server(vserver_name: str, domain_name: str, nfs_server: str, serv
         print("Error: NFS Server was not created: %s" % err)
     return
 
-def create_export_policy(vserver_name: str, ex_path: str, host_name: str) -> None:
+def create_export_policy(vserver_name: str, ex_path: str, host_name: str, ex_policy: str) -> None:
     """Creates an export policy for an SVM"""
-    
+
     SVM = Svm.find(name=vserver_name)
 
     data = {
-        'name': ex_path,
+        'name': ex_policy,
         'svm': {'name': vserver_name, 'uuid': SVM.uuid},
+        'policy': ex_policy,
         'rules': [
             {
-                'clients': [{'match': '0.0.0.0/0'}],'ro_rule': ['any'], 'rw_rule': ['any'], 'anonymous_user': 'any',
-            },
-        ] 
+                'clients': [{'match': '0.0.0.0/0'}],'ro_rule': ['any'], 'rw_rule': ['any'], 'anonymous_user': 'any', 'superuser': ['any'], 'protocols': ['any']
+            }
+        ]
     }
 
     export_policy = ExportPolicy(**data)
@@ -164,6 +165,31 @@ def create_export_policy(vserver_name: str, ex_path: str, host_name: str) -> Non
         print("Export Policy for NFS Server %s created successfully" % export_policy.name)
     except NetAppRestError as err:
         print("Error: Export Policy was not created: %s" % err)
+    return
+
+def create_export_rule(vserver_name:str, ex_policy: str)  -> None:
+    """Creates an export rule for an SVM"""
+
+    SVM = Svm.find(name=vserver_name)
+    EP = ExportPolicy.find(name=ex_policy)
+
+    data = {
+        'policy.id': EP.id,
+        'clients': [{'match': '0.0.0.0/0'}],
+        'ro_rule': ['any'],
+        'rw_rule': ['any'],
+        'anonymous_user': 'any',
+        'superuser': ['any'],
+        'protocols': ['any']
+    }
+
+    export_rule = ExportRule(**data)
+
+    try:
+        export_rule.post()
+        print("Export Rule for NFS Server %s created successfully" % export_rule.policy.id)
+    except NetAppRestError as err:
+        print("Error: Export Rule was not created: %s" % err)
     return
 
 def parse_args() -> argparse.Namespace:
@@ -208,6 +234,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "-sh", "--ex_path", required=True, help="Export Path"
     )
+    parser.add_argument(
+        "-ep", "--ex_policy", required=True, help="Export Policy"
+    )
 
     parser.add_argument("-u", "--api_user", default="admin", help="API Username")
     parser.add_argument("-p", "--api_pass", help="API Password")
@@ -221,12 +250,9 @@ def parse_args() -> argparse.Namespace:
 
 if __name__ == "__main__":
     logging.basicConfig(
-    #    level=logging.DEBUG,
         level=logging.INFO,
         format="[%(asctime)s] [%(levelname)5s] [%(module)s:%(lineno)s] %(message)s",
     )
-
-    #utils.LOG_ALL_API_CALLS = 1
 
     args = parse_args()
     config.CONNECTION = HostConnection(
@@ -239,4 +265,5 @@ if __name__ == "__main__":
     create_route(args.vserver_name, args.gateway_ip)
     create_dns(args.vserver_name, args.cluster, args.server_ip)
     create_nfs_server(args.vserver_name, args.domain, args.nfs_server, args.server_ip)
-    create_export_policy(args.vserver_name, args.ex_path, args.nfs_server)
+    create_export_policy(args.vserver_name, args.ex_path, args.nfs_server, args.ex_policy)
+    create_export_rule(args.vserver_name, args.ex_policy)
