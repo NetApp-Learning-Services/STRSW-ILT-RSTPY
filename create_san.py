@@ -1,10 +1,10 @@
-#! /usr/bin/env python3
+#! /usr/local/bin/python3.11
 
 """
 Purpose: Script to create sn SVM by using the netapp_ontap library.
          It will create a SVM, a volume, two data interfaces and enable iscsi.
 Author: Vish Hulikal
-Usage: create_san.py [-h] -c CLUSTER -a AGGR_NAME, -n NODE_NAME, -vs VSERVER_NAME, -v VOLUME_NAME -ip DATA_LIF,
+Usage: python3.11 create_san.py [-h] -c CLUSTER -a AGGR_NAME, -n NODE_NAME, -vs VSERVER_NAME, -v VOLUME_NAME -ip DATA_LIF,
                  -lif INTERFACE_NAME,   -nm NET_MASK, [-u API_USER] [-p API_PASS]
 """
 
@@ -148,5 +148,3 @@ if __name__ == "__main__":
     create_svm(args.vserver_name, args.aggr_name)
     make_volume(args.volume_name, args.vserver_name, args.aggr_name, 300000000)
     create_data_interface(args.vserver_name, args.interface_name, args.node_name, args.ip_address, args.ip_netmask)
-
-
