@@ -1,20 +1,18 @@
-#! /usr/bin/env python3.7
+#! /usr/local/bin/python3.11
 
 """
-ONTAP 9.10 REST API Python Client Library Scripts
+ONTAP 9.13.1 REST API Python Client Library Scripts
 Author: Vish Hulikal
 This script performs the following:
         - Create an SVM (or VServer)
         - Create an S3 user
         - Create an S3 bucket
-ONTAP S3 License: GARXWLLISPYQSDAAAAAAAAAAAAAA
 Minimum size of the bucket to be created: 102005473280B
-
-usage: python3 object.py [-h] -c CLUSTER -vs VSERVER_NAME -a AGGR_NAME -s S3_NAME -b BUCKET_NAME
+usage: python3.11 object.py [-h] -c CLUSTER -vs VSERVER_NAME -a AGGR_NAME -s S3_NAME -b BUCKET_NAME
                -un S3_USER_NAME -n SIZE [-u API_USER] [-p API_PASS]
 These arguments required: -c/--cluster, -vs/--vserver_name, -a/--aggr_name, -s/--s3_name, -b/--bucket_name
                -un/--s3_user_name, -n/--size, -u/--admin, -p/--password
-Usage: python3 object.py -c cluster1 -vs VServer1 -a aggr1 -s S3_Server -b s3bucket -un S3_User -n 102005473280 -u admin -p Netapp1!
+Usage: python3.11 object.py -c cluster1 -vs VServer1 -a aggr1 -s S3_Server -b s3bucket -un S3_User -n 102005473280 -u admin -p Netapp1!
 """
 
 import argparse
@@ -52,8 +50,6 @@ def make_s3_user(vserver_name: str, user_name: str) -> None:
     try:
         resource.post()
         print("S3 User %s created successfully" % resource.name)
-#        print("S3 User - Access Key %s", % resource.access_key)
-#        print("S3 User - Secret Key %s", % resource.secret_key)
     except NetAppRestError as err:
         print("Error: S3 User was not created" % err)
     return
@@ -130,5 +126,3 @@ if __name__ == "__main__":
     create_svm(args.vserver_name, args.aggr_name, args.s3_name)
     make_s3_user(args.vserver_name, args.user_name)
     make_bucket(args.vserver_name, args.aggr_name, args.bucket_name, args.size)
-
-
