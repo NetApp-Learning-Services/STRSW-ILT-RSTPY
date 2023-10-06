@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#! /usr/local/bin/python3.11
 
 """
 Purpose: Script to create sn SVM by using the netapp_ontap library.
@@ -7,7 +7,7 @@ Purpose: Script to create sn SVM by using the netapp_ontap library.
 Author: Vish Hulikal
 Usage: cifs.py [-h] -c CLUSTER -a AGGR_NAME, -n NODE_NAME, -vs VSERVER_NAME, -v VOLUME_NAME -ip DATA_LIF, -g GATEWAY, -d DOMAIN, -s SERVER_IP,
                     -nm NET_MASK -se CIFS_SERVER, -sh CIFS_SHARE, -pa PATH, [-u API_USER] [-p API_PASS]
-python3.7 cifs.py: -c cluster -a aggr_name, -n/--node_name, -vs/--vserver_name, -v/--volume_name, -ip/--ip_address, -g/--gateway_ip, -d/--domain,
+python3.11 cifs.py: -c cluster -a aggr_name, -n/--node_name, -vs/--vserver_name, -v/--volume_name, -ip/--ip_address, -g/--gateway_ip, -d/--domain,
                 -s/--server_ip, -nm/--net_mask -se/--cifs_server, -sh/--cifs_share, -pa/--cifs_path
 """
 
@@ -46,7 +46,7 @@ def make_volume(volume_name: str, vserver_name: str, aggr_name: str, net_path: s
         'nas': {'security_style': 'ntfs', 'path': net_path},
         #'junction_path': net_path,
         #'security_style': 'ntfs',
-        'space_guarantee': 'volume' 
+        'space_guarantee': 'volume'
     }
 
     volume = Volume(**data)
@@ -110,7 +110,7 @@ def create_data_interface(vserver_name: str, interface_name: str, node_name: str
 
 def create_route(vserver_name: str, net_gateway_ip: str) -> None:
     """Creates a network route"""
-    """The default destination will be set to "0.0.0.0/0" for IPv4 gateway addresses""" 
+    """The default destination will be set to "0.0.0.0/0" for IPv4 gateway addresses"""
 
     data = {
         'gateway': net_gateway_ip,
@@ -263,4 +263,3 @@ if __name__ == "__main__":
     create_dns(args.vserver_name, args.cluster, args.server_ip)
     create_cifs_server(args.vserver_name, args.domain, args.cifs_server, args.server_ip)
     create_cifs_share(args.vserver_name, args.cifs_share, args.cifs_path)
-
