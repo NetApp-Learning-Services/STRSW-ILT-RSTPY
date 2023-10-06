@@ -1,13 +1,13 @@
-#! /usr/local/bin/env python3
+#! /usr/local/bin/python3.11
 
 """
-ONTAP 9.7 REST API Python Client Library Scripts
+ONTAP 9.13.1 REST API Python Client Library Scripts
 Author: Vish Hulikal
 This script performs the following:
         - Create a qtree (or quota tree)
         - Create a quota policy rule
 
-usage: python3 qtree.py [-h] -c cluster -v VOLUME_NAME -vs VSERVER_NAME -q QTREE_NAME
+usage: python3.11 qtree.py [-h] -c cluster -v VOLUME_NAME -vs VSERVER_NAME -q QTREE_NAME
        -sh SPACE_HARD -fh FILE_HARD [-u API_USER] [-p API_PASS]
 The following arguments are required: -v/--volume_name, -vs/--vserver_name,
           -q/--qtree_name, -sh/--space_hard, -fh/--file_hard
@@ -106,4 +106,3 @@ if __name__ == "__main__":
     # Create a quota tree and a policy rule for the qtree
     create_qtree(args.volume_name, args.vserver_name, args.qtree_name)
     create_policy_rule(args.volume_name, args.vserver_name, args.qtree_name, args.space_hard, args.file_hard)
-
