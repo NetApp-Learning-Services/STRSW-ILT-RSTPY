@@ -4,8 +4,8 @@
 Purpose: Script to create sn SVM by using the netapp_ontap library.
          It will create a Group, a lun and map the igroup to the lun.
 Author: Vish Hulikal
-Usage: create_igroup.py [-h] -c CLUSTER -vs VSERVER_NAME, -l LUN_NAME -lif INTERFACE_NAME -ig IGROUP_NAME -ip IP_ADDRESS
-       -n NODE_NAME -nm NET_MASK [-u API_USER] [-p API_PASS]
+Usage: create_igroup.py [-h] -c CLUSTER -vs VSERVER_NAME, -l LUN_NAME -lif INTERFACE_NAME -ig IGROUP_NAME
+                        [-u API_USER] [-p API_PASS]
 """
 
 import argparse
@@ -15,31 +15,6 @@ from typing import Optional
 
 from netapp_ontap import config, utils, HostConnection, NetAppRestError
 from netapp_ontap.resources import Volume, Lun, Igroup, LunMap, IpInterface
-
-def create_data_interface(vserver_name: str, interface_name:str, node_name: str, ip_address: str, ip_netmask: str) -> None:
-    """Creates an SVM-scoped IP Interface"""
-
-    data = {
-        'name': interface_name,
-        'ip': {'address': ip_address, 'netmask': ip_netmask},
-        'enabled': True,
-        'scope': 'svm',
-        'svm': {'name': vserver_name},
-        'port': {'name': 'e0d', 'node': node_name},
-        'location': {
-           'auto_revert': True,
-           'broadcast_domain': {'name': 'Default'},
-        }
-    }
-
-    ip_interface = IpInterface(**data)
-
-    try:
-        ip_interface.post()
-        print("Ip Interface %s created successfully" % ip_interface.ip.address)
-    except NetAppRestError as err:
-        print("Error: IP Interface was not created: %s" % err)
-    return
 
 def create_igroup(igroup_name: str, vserver_name: str) -> None:
     """Create an Igroup on the SVM"""
@@ -118,15 +93,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "-ig", "--igroup_name", required=True, help="Igroup name"
     )
-    parser.add_argument(
-        "-ip", "--ip_address", required=True, help="Data Interface IP Address"
-    )
-    parser.add_argument(
-        "-n", "--node_name", required=True, help="API server Node Name"
-    )
-    parser.add_argument(
-        "-nm", "--ip_netmask", required=True, help="DNS Server IP Address"
-    )
 
     parser.add_argument("-u", "--api_user", default="admin", help="API Username")
     parser.add_argument("-p", "--api_pass", help="API Password")
@@ -149,9 +115,6 @@ if __name__ == "__main__":
         args.cluster, username=args.api_user, password=args.api_pass, verify=False,
     )
 
-    create_data_interface(args.vserver_name, args.interface_name, args.node_name, args.ip_address, args.ip_netmask)
     create_igroup(args.igroup_name, args.vserver_name)
     create_lun(args.lun_name, args.vserver_name, 30000000)
     create_lun_map(args.vserver_name, args.igroup_name, args.lun_name)
-
-
