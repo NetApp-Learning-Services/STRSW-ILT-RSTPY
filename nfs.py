@@ -5,9 +5,12 @@ Purpose: Script to create sn SVM by using the netapp_ontap library.
          It will create a Data Interface, Network Default, Gateway.
          It will also create a DNS Domain, NFS Server and NFS Export.
 Author: Vish Hulikal
-Usage: nfs.py [-h] -c CLUSTER -a AGGR_NAME, -n NODE_NAME, -vs VSERVER_NAME, -v VOLUME_NAME, -ip DATA_LIF, -g GATEWAY, -d DOMAIN, -s SEVER_IP,
-                    -nm NET_MASK -se NFS_SERVER, -sh EXPORT_PATH, -ep EXPORT_POLICY, [-u API_USER] [-p API_PASS]
-python3.11 nfs.py: -c cluster -a aggr_name, -vs/--vserver_name, -ip/--ip_address, -g/--gateway_ip, -d/--domain,
+Usage: nfs.py [-h] -c CLUSTER -a AGGR_NAME, -n NODE_NAME, -vs VSERVER_NAME,
+                i   -v VOLUME_NAME, -ip DATA_LIF, -g GATEWAY, -d DOMAIN, -s SEVER_IP,
+                    -nm NET_MASK -se NFS_SERVER, -sh EXPORT_PATH,
+                    -ep EXPORT_POLICY, [-u API_USER] [-p API_PASS]
+python3.11 nfs.py: -c cluster -a aggr_name, -vs/--vserver_name, -ip/--ip_address,
+                   -g/--gateway_ip, -d/--domain, -s /--server_ip, -nm
                 -s/--server_ip, -nm/--net_mask -se/--nfs_server, -sh/--ex_path -ep/--ex_policy
 """
 
@@ -35,27 +38,6 @@ def create_svm(vserver_name: str, aggr_name: str) -> None:
         print("SVM %s created successfully" % svm.name)
     except NetAppRestError as err:
         print("Error: SVM was not created: %s" % err)
-    return
-
-def make_volume(volume_name: str, vserver_name: str, aggr_name: str, net_path: str, volume_size: int) -> None:
-    """Creates a new volume in a SVM"""
-
-    data = {
-        'name': volume_name,
-        'svm': {'name': vserver_name},
-        'aggregates': [{'name': aggr_name }],
-        'size': volume_size,
-        'nas': {'security_style': 'unix', 'path': net_path, 'unix_permissions': 4777, 'export_policy.name': 'Default','junction_parent.name': volume_name},
-        'space_guarantee': 'volume'
-    }
-
-    volume = Volume(**data)
-
-    try:
-        volume.post()
-        print("Volume %s created successfully" % volume.name)
-    except NetAppRestError as err:
-        print("Error: Volume was not created: %s" % err)
     return
 
 def create_data_interface(vserver_name: str, interface_name: str, node_name: str, ip_address: str, ip_netmask: str) -> None:
@@ -161,16 +143,15 @@ def create_export_policy(vserver_name: str, ex_path: str, host_name: str, ex_pol
     export_policy = ExportPolicy(**data)
 
     try:
-        export_policy.post()
+        export_policy.patch()
         print("Export Policy for NFS Server %s created successfully" % export_policy.name)
     except NetAppRestError as err:
         print("Error: Export Policy was not created: %s" % err)
     return
 
-def create_export_rule(vserver_name:str, ex_policy: str)  -> None:
+def create_export_rule(ex_policy: str)  -> None:
     """Creates an export rule for an SVM"""
 
-    SVM = Svm.find(name=vserver_name)
     EP = ExportPolicy.find(name=ex_policy)
 
     data = {
@@ -190,6 +171,27 @@ def create_export_rule(vserver_name:str, ex_policy: str)  -> None:
         print("Export Rule for NFS Server %s created successfully" % export_rule.policy.id)
     except NetAppRestError as err:
         print("Error: Export Rule was not created: %s" % err)
+    return
+
+def make_volume(volume_name: str, vserver_name: str, aggr_name: str, net_path: str, ex_policy: str, volume_size: int) -> None:
+    """Creates a new volume in a SVM"""
+
+    data = {
+        'name': volume_name,
+        'svm': {'name': vserver_name},
+        'aggregates': [{'name': aggr_name }],
+        'size': volume_size,
+        'nas': {'security_style': 'unix', 'path': net_path, 'unix_permissions': 4777, 'export_policy.name': ex_policy, 'junction_parent.name': vserver_name + "_root"},   #volume_name},
+        'space_guarantee': 'volume'
+    }
+
+    volume = Volume(**data)
+
+    try:
+        volume.post()
+        print("Volume %s created successfully" % volume.name)
+    except NetAppRestError as err:
+        print("Error: Volume was not created: %s" % err)
     return
 
 def parse_args() -> argparse.Namespace:
@@ -260,10 +262,10 @@ if __name__ == "__main__":
     )
 
     create_svm(args.vserver_name, args.aggr_name)
-    make_volume(args.volume_name, args.vserver_name, args.aggr_name, args.ex_path, 200000000)
     create_data_interface(args.vserver_name, args.volume_name, args.node_name, args.ip_address, args.ip_netmask)
     create_route(args.vserver_name, args.gateway_ip)
     create_dns(args.vserver_name, args.cluster, args.server_ip)
     create_nfs_server(args.vserver_name, args.domain, args.nfs_server, args.server_ip)
     create_export_policy(args.vserver_name, args.ex_path, args.nfs_server, args.ex_policy)
-    create_export_rule(args.vserver_name, args.ex_policy)
+#    create_export_rule(args.ex_policy)
+    make_volume(args.volume_name, args.vserver_name, args.aggr_name, args.ex_path, args.ex_policy, 200000000)

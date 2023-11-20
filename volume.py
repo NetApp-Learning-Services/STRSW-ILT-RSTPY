@@ -10,10 +10,10 @@ This script performs the following:
         - Resize a volume to a new (bigger) size
         - Delete a volume
 
-usage: python3.11 volume.py [-h] -c CLUSTER -v VOLUME_NAME -vs VSERVER_NAME -a AGGR_NAME -ma MOVE_AGGR_NAME
+usage: python3.11 volume.py [-h] -c CLUSTER -v VOLUME_NAME -vs VSERVER_NAME -a AGGR_NAME
                -rs VOLUME_RESIZE -s VOLUME_SIZE [-u API_USER] [-p API_PASS]
 The following arguments are required: -c/--cluster, -v/--volume_name, -vs/--vserver_name,
-                -a/--aggr_name, -ma/--move_aggr_name, -rs/--volume_resize, -s/--volume_size
+                -a/--aggr_name, -rs/--volume_resize, -s/--volume_size
 """
 
 import argparse
@@ -93,19 +93,6 @@ def resize_volume(volume_name: str, volume_resize: int) -> None:
         print("Error: Volume was not resized: %s" % err)
     return
 
-def move_volume(volume_name: str, move_aggr_name: str) -> None:
-    """Move the volume to a new aggregate"""
-
-    volume = Volume.find(name=volume_name)
-    volume.movement = VolumeMovement(destination_aggregate={'name': move_aggr_name})
-
-    try:
-        volume.patch()
-        print("Volume %s moved successfully" % volume.name)
-    except NetAppRestError as err:
-        print("Error: Volume was not moved: %s" % err)
-    return
-
 def parse_args() -> argparse.Namespace:
     """Parse the command line arguments from the user"""
 
@@ -123,9 +110,6 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "-a", "--aggr_name", required=True, help="Aggregate to create the volume from"
-    )
-    parser.add_argument(
-        "-ma", "--move_aggr_name", required=True, help="Move the volume to a new aggregate"
     )
     parser.add_argument(
         "-rs", "--volume_resize", required=True, help="Volume resize in bytes"
@@ -162,9 +146,6 @@ if __name__ == "__main__":
 
     # Get the volume details
     get_volume(args.volume_name)
-
-    # Move the volume to a new aggregate
-    #move_volume(args.volume_name, args.move_aggr_name)
 
     # Resize a volume
     resize_volume(args.volume_name, args.volume_resize)
