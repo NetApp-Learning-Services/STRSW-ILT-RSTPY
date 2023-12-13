@@ -4,7 +4,7 @@
 Purpose: Script to create sn SVM by using the netapp_ontap library.
          It will create a Group, a lun and map the igroup to the lun.
 Author: Vish Hulikal
-Usage: python3.11 aru.py [-h] -c CLUSTER -vs VSERVER_NAME, -l LUN_NAME -lif INTERFACE_NAME -ig IGROUP_NAME
+Usage: python3.11 aru.py [-h] -c CLUSTER -vs VSERVER_NAME, -l LUN_NAME -ig IGROUP_NAME
        [-u API_USER] [-p API_PASS]
 """
 
@@ -23,7 +23,7 @@ def create_igroup(igroup_name: str, vserver_name: str) -> None:
         'name': igroup_name,
         'svm': {'name': vserver_name},
         'protocol': 'iscsi',
-        'os_type': 'linux'
+        'os_type': 'windows'
     }
 
     igroup = Igroup(**data)
@@ -42,7 +42,7 @@ def create_lun(lun_name: str, vserver_name: str, lun_size: int) -> None:
         'name': lun_name,
         'svm': {'name': vserver_name},
         'space': {'size': lun_size},
-        'os_type': 'linux'
+        'os_type': 'windows'
     }
 
     lun = Lun(**data)
@@ -86,9 +86,6 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "-l", "--lun_name", required=True, help="LUN path-name"
-    )
-    parser.add_argument(
-        "-lif", "--interface_name", required=True, help="Interface name"
     )
     parser.add_argument(
         "-ig", "--igroup_name", required=True, help="Igroup name"

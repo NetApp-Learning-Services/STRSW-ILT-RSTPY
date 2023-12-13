@@ -20,7 +20,7 @@ python3.11 S3_Server.py -c cluster1 -vs nas_svm_05 -a aggr1_cluster1_01_data -s 
 ------------------
 python3.11 create_san.py -c cluster1 -n cluster1-01 -a aggr1_cluster1_01_data -vs san_svm -v san_vol -ip 192.168.0.241 -nm 255.255.255.0 -lif san_svm_iscsi_1 -u admin -p Netapp1!
 -----------------------
-python3.11 create_igroup.py -c cluster1 -vs san_svm -l /vol/san_vol/lun1 -lif lif_san2 -ig igroup1 -u admin -p Netapp1!
+python3.11 create_igroup.py -c cluster1 -vs san_svm -l /vol/san_vol/lun1 -ig igroup1 -u admin -p Netapp1!
 ----------------------
 python3.11 protocol.py  -c cluster1 -vs nas_svm -v nas_svm_vol_01 -u admin -p Netapp1!
 --------------------------------------------------------------------------------------
