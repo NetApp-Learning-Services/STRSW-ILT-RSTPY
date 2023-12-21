@@ -173,7 +173,7 @@ def create_export_rule(ex_policy: str)  -> None:
         print("Error: Export Rule was not created: %s" % err)
     return
 
-def make_volume(volume_name: str, vserver_name: str, aggr_name: str, net_path: str, ex_policy: str, volume_size: int) -> None:
+def create_volume(volume_name: str, vserver_name: str, aggr_name: str, net_path: str, ex_policy: str, volume_size: int) -> None:
     """Creates a new volume in a SVM"""
 
     data = {
@@ -268,4 +268,4 @@ if __name__ == "__main__":
     create_nfs_server(args.vserver_name, args.domain, args.nfs_server, args.server_ip)
     create_export_policy(args.vserver_name, args.ex_path, args.nfs_server, args.ex_policy)
 #    create_export_rule(args.ex_policy)
-    make_volume(args.volume_name, args.vserver_name, args.aggr_name, args.ex_path, args.ex_policy, 200000000)
+    create_volume(args.volume_name, args.vserver_name, args.aggr_name, args.ex_path, args.ex_policy, 200000000)

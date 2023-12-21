@@ -54,7 +54,7 @@ def create_svm(vserver_name: str, aggr_name: str) -> None:
         print("Error: SVM was not created: %s" % err)
     return
 
-def make_volume(volume_name: str, vserver_name: str, aggr_name: str, volume_size: int) -> None:
+def create_volume(volume_name: str, vserver_name: str, aggr_name: str, volume_size: int) -> None:
     """Creates a new volume in a SVM"""
 
     data = {
@@ -136,7 +136,7 @@ if __name__ == "__main__":
     # Create an Aggregate, a VServer and a Volume
     create_aggregate(args.aggr_name, args.node_name, args.disk_count)
     create_svm(args.vserver_name, args.aggr_name)
-    make_volume(args.volume_name, args.vserver_name, args.aggr_name , args.volume_size)
+    create_volume(args.volume_name, args.vserver_name, args.aggr_name , args.volume_size)
 
     # List all volumes in the VServer
     list_volumes(args.vserver_name)

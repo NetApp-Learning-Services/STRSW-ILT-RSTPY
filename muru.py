@@ -18,7 +18,7 @@ from netapp_ontap import config, utils, HostConnection, NetAppRestError
 from netapp_ontap.resources import Svm, Volume, NetworkRoute, Dns, CifsService, CifsShare
 #from netapp_ontap.resources import Netbios
 
-def make_volume(volume_name: str, vserver_name: str, aggr_name: str, net_path: str, volume_size: int) -> None:
+def create_volume(volume_name: str, vserver_name: str, aggr_name: str, net_path: str, volume_size: int) -> None:
     """Creates a new volume in a SVM"""
 
     data = {
@@ -174,7 +174,7 @@ if __name__ == "__main__":
         args.cluster, username=args.api_user, password=args.api_pass, verify=False,
     )
 
-    make_volume(args.volume_name, args.vserver_name, args.aggr_name, args.cifs_path, 300000000)
+    create_volume(args.volume_name, args.vserver_name, args.aggr_name, args.cifs_path, 300000000)
     create_route(args.vserver_name, args.gateway_ip)
     create_dns(args.vserver_name, args.domain, args.server_ip)
     create_cifs_server(args.vserver_name, args.domain, args.cifs_server, args.server_ip)

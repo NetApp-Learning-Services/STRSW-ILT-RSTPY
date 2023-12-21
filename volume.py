@@ -24,7 +24,7 @@ from netapp_ontap import config, HostConnection, NetAppRestError
 from netapp_ontap.resources import Volume
 from netapp_ontap.models import VolumeMovement
 
-def make_volume(volume_name: str, vserver_name: str, aggr_name: str, volume_size: int) -> None:
+def create_volume(volume_name: str, vserver_name: str, aggr_name: str, volume_size: int) -> None:
     """Creates a new volume in a SVM"""
 
     data = {
@@ -139,7 +139,7 @@ if __name__ == "__main__":
     )
 
     # Create a Volume
-    make_volume(args.volume_name, args.vserver_name, args.aggr_name , args.volume_size)
+    create_volume(args.volume_name, args.vserver_name, args.aggr_name , args.volume_size)
 
     # List all volumes in the VServer
     list_volumes(args.vserver_name)

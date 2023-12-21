@@ -35,7 +35,7 @@ def create_svm(vserver_name: str, aggr_name: str) -> None:
         print("Error: SVM was not created: %s" % err)
     return
 
-def make_volume(volume_name: str, vserver_name: str, aggr_name: str, net_path: str, volume_size: int) -> None:
+def create_volume(volume_name: str, vserver_name: str, aggr_name: str, net_path: str, volume_size: int) -> None:
     """Creates a new volume in a SVM"""
 
     data = {
@@ -256,7 +256,7 @@ if __name__ == "__main__":
     )
 
     create_svm(args.vserver_name, args.aggr_name)
-    make_volume(args.volume_name, args.vserver_name, args.aggr_name, args.cifs_path, 300000000)
+    create_volume(args.volume_name, args.vserver_name, args.aggr_name, args.cifs_path, 300000000)
     #create_mgmt_interface(args.vserver_name, args.vserver_name, args.node_name, args.ip_address, args.ip_netmask)
     create_data_interface(args.vserver_name, args.volume_name, args.node_name, args.ip_address, args.ip_netmask)
     create_route(args.vserver_name, args.gateway_ip)
