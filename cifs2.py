@@ -49,7 +49,7 @@ def create_cifs_server(vserver_name: str, domain_name: str, cifs_server: str, se
         'scope': 'svm',
         'svm': {'name': vserver_name, 'uuid': SVM.uuid},
         'ad_domain': {'fqdn': domain_name, 'organizational_unit': 'CN=Computers', 'user': 'Administrator', 'password': 'Netapp1!'},
-        'netbios': {'wins_servers': [server_ip]},
+#        'netbios': {'wins_servers': [server_ip]},
         'enabled': 'True'
     }
 
