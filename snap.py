@@ -20,7 +20,7 @@ from typing import Optional
 from netapp_ontap import config, HostConnection, NetAppRestError
 from netapp_ontap.resources import Volume, Snapshot, SnapshotPolicy, Schedule
 
-def make_snap(vol_name: str, snapshot_name: str) -> Optional[Snapshot]:
+def create_snap(vol_name: str, snapshot_name: str) -> Optional[Snapshot]:
     """Create a new snapshot with default settings for a given volume"""
 
     volume = Volume.find(name=vol_name)
@@ -112,6 +112,6 @@ if __name__ == "__main__":
         args.cluster, username=args.api_user, password=args.api_pass, verify=False,
     )
 
-    snapshot = make_snap(args.volume_name, args.snapshot_name)
+    snapshot = create_snap(args.volume_name, args.snapshot_name)
     schedule = create_schedule(args.schedule_name)
     policy = create_snapshot_policy(args.policy_name, args.vserver_name, args.schedule_name)

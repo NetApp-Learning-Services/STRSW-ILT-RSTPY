@@ -30,7 +30,7 @@ def create_qtree(volume_name: str, vserver_name: str, qtree_name: str) -> None:
         'security_style': 'unix',
         'unix_permissions': 744,
         'export_policy_name': 'default',
-        'qos_policy': {'max_throughput_ops': 1000}
+#        'qos_policy': {'max_throughput_ops': 1000}
     }
     qtree = Qtree(**data)
     try:
