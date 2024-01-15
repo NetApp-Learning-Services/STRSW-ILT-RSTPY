@@ -8,7 +8,7 @@ python3.11 qtree.py -c cluster1 -v Vol1 -vs nas_svm -q QTree1 -sh 1000000 -fh 10
 -------------------------------------------------------------------
 python3.11 cifs.py -c cluster1 -n cluster1-01 -a aggr1_cluster1_01_data -vs nas_svm_02 -v nas_svm_02_cifs_02 -ip 192.168.0.210 -nm 255.255.255.0 -g 192.168.0.1 -d demo.netapp.com -s 192.168.0.253 -se nas_svm_02 -sh share_02 -pa /nas_svm_02_cifs_02 -u admin -p Netapp1!
 ---------------------------------------------------------------------
-python3.11 cifs2.py -c cluster1 -a aggr1_cluster1_01_data -vs nas_svm -v nas_svm_cifs_01 -sh share_01 -pa /nas_svm__cifs_01 -d demo.netapp.com -g 192.168.0.1 -s 192.168.0.253 -se nas_svm_01  -u admin -p Netapp1!
+python3.11 cifs2.py -c cluster1 -a aggr1_cluster1_01_data -vs nas_svm -v nas_svm_cifs_01 -sh share_01 -pa /nas_svm_cifs_01 -d demo.netapp.com -g 192.168.0.1 -s 192.168.0.253 -se nas_svm_01  -u admin -p Netapp1!
 -----------------------------
 python3.11 nfs.py -c cluster1 -n cluster1-01 -a aggr1_cluster1_01_data -vs nas_svm_03 -v nas_svm_03_nfs_03 -ip 192.168.0.215 -nm 255.255.255.0 -g 192.168.0.1 -d demo.netapp.com -s 192.168.0.253 -se nas_svm_03 -sh /nas_svm_03_nfs_03 -ep default -u admin -p Netapp1!
 ---------------------------------------------------------
