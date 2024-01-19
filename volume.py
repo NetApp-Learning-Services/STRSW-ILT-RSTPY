@@ -68,10 +68,13 @@ def get_volume(volume_name: str) -> None:
         print("Error: Volume details not obtained: %s" % err)
     return
 
-def delete_volume(volume_name: str) -> None:
+def delete_volume(vserver_name: str, volume_name: str) -> None:
     """Delete a volume in a SVM"""
 
-    volume = Volume.find(name=volume_name)
+    volume = Volume.find(name=volume_name, svm={"name":vserver_name})
+    if (volume == None):
+        print ("Error: Volume %s not found!" % volume.name)
+        return
 
     try:
         volume.delete()
@@ -80,10 +83,14 @@ def delete_volume(volume_name: str) -> None:
         print("Error: Volume was not deleted: %s" % err)
     return
 
-def resize_volume(volume_name: str, volume_resize: int) -> None:
+def resize_volume(vserver_name: str, volume_name: str, volume_resize: int) -> None:
     """Resize a volume in a SVM"""
 
-    volume = Volume.find(name=volume_name)
+    volume = Volume.find(name=volume_name, svm={"name":vserver_name})
+    if (volume == None):
+        print ("Error: Volume %s not found!" % volume.name)
+        return
+
     volume.size = volume_resize
 
     try:
@@ -148,7 +155,8 @@ if __name__ == "__main__":
     get_volume(args.volume_name)
 
     # Resize a volume
-    resize_volume(args.volume_name, args.volume_resize)
+    resize_volume(args.vserver_name, args.volume_name, args.volume_resize)
 
     # Delete a volume
-    delete_volume(args.volume_name)
+    delete_volume(args.vserver_name, args.volume_name)
+
