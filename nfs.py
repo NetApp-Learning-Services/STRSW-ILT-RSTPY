@@ -266,6 +266,6 @@ if __name__ == "__main__":
     create_route(args.vserver_name, args.gateway_ip)
     create_dns(args.vserver_name, args.cluster, args.server_ip)
     create_nfs_server(args.vserver_name, args.domain, args.nfs_server, args.server_ip)
-    create_export_policy(args.vserver_name, args.ex_path, args.nfs_server, args.ex_policy)
+#    create_export_policy(args.vserver_name, args.ex_path, args.nfs_server, args.ex_policy)
 #    create_export_rule(args.ex_policy)
     create_volume(args.volume_name, args.vserver_name, args.aggr_name, args.ex_path, args.ex_policy, 200000000)
