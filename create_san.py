@@ -22,7 +22,7 @@ def create_svm(vserver_name: str, aggr_name: str) -> None:
     svm = Svm.from_dict({
     'name': vserver_name,
     'aggregates': [{'name': aggr_name}],
-    'iscsi': {'enabled': "true"}
+#    'iscsi': {'enabled': "true"}
     })
 
     try:
@@ -146,5 +146,6 @@ if __name__ == "__main__":
     )
 
     create_svm(args.vserver_name, args.aggr_name)
+    create_iscsi_service(args.vserver_name)
     create_volume(args.volume_name, args.vserver_name, args.aggr_name, 300000000)
     create_data_interface(args.vserver_name, args.interface_name, args.node_name, args.ip_address, args.ip_netmask)
