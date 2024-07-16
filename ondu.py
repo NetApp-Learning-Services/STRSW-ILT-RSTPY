@@ -1,7 +1,6 @@
 #! /usr/bin/env python3.7
 """
 	Sample Python Script
-Author: Vish Hulikal
 This will get detials about aggregates.
 """
 

@@ -4,7 +4,6 @@
 Purpose: Script to create using the netapp_ontap library.
          It will create an NFS server.
          It will also create an NFS Export.
-Author: Vish Hulikal
 Usage: nfs.py [-h] -c CLUSTER -vs VSERVER_NAME,  -d DOMAIN, -s SEVER_IP,
                     -se NFS_SERVER, [-u API_USER] [-p API_PASS]
 """

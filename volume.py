@@ -2,7 +2,6 @@
 
 """
 ONTAP 9.13.1 REST API Python Client Library Scripts
-uthor: Vish Hulikal
 This script performs the following:
         - Create a volume
         - List all volumes

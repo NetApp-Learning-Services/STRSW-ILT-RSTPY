@@ -4,7 +4,6 @@
 Purpose: Script to create sn SVM by using the netapp_ontap library.
          It will create a Data Interface, Network Default, Gateway.
          It will also create a DNS Domain, CIFS Server and CIFS Share.
-Author: Vish Hulikal
 Usage: cifs.py [-h] -c CLUSTER -a AGGR_NAME, -n NODE_NAME, -vs VSERVER_NAME, -v VOLUME_NAME -ip DATA_LIF, -g GATEWAY, -d DOMAIN, -s SERVER_IP,
                     -nm NET_MASK -se CIFS_SERVER, -sh CIFS_SHARE, -pa PATH, [-u API_USER] [-p API_PASS]
 python3.11 cifs.py: -c cluster -a aggr_name, -n/--node_name, -vs/--vserver_name, -v/--volume_name, -ip/--ip_address, -g/--gateway_ip, -d/--domain,

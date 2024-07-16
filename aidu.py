@@ -2,7 +2,6 @@
 
 """
 ONTAP 9.13.1 REST API Python Client Library Scripts
-Author: Vish Hulikal
 This script performs the following:
         - Create an S3 user
         - Create an S3 bucket

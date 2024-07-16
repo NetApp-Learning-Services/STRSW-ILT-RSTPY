@@ -3,7 +3,6 @@
 """
 Purpose: Script to create sn SVM by using the netapp_ontap library.
          It will create a Group, a lun and map the igroup to the lun.
-Author: Vish Hulikal
 Usage: python3.11 aru.py [-h] -c CLUSTER -vs VSERVER_NAME, -l LUN_NAME -ig IGROUP_NAME
        [-u API_USER] [-p API_PASS]
 """

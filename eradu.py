@@ -2,7 +2,6 @@
 
 """
 ONTAP 9.13.1 REST API Python Client Library Scripts
-Author: Vish Hulikal
 This script performs the following:
         - Create a qtree (or quota tree)
         - Create a quota policy rule

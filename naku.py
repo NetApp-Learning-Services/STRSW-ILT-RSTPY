@@ -4,7 +4,6 @@
 Purpose: Script to create using the netapp_ontap library.
          It will create an SVM.
          It will create an NFS server.
-Author: Vish Hulikal
 Usage: naku.py [-h] -c CLUSTER -vs VSERVER_NAME, -a AGGR_NAME,  -d DOMAIN, -s SERVER_IP,
                     -se NFS_SERVER, [-u API_USER] [-p API_PASS]
 """

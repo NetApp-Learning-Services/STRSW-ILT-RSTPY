@@ -1,7 +1,6 @@
 #! /usr/bin/python3.11
 """
 ONTAP 9.13.1 REST API Python Sample Scripts
-Author: Vish Hulikal
 Purpose: Script to create snapshot using the netapp_ontap library.
          It will also create a policy for the snapshot.
          It will also create a schedule for the policy.

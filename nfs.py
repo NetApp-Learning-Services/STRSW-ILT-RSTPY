@@ -4,7 +4,6 @@
 Purpose: Script to create sn SVM by using the netapp_ontap library.
          It will create a Data Interface, Network Default, Gateway.
          It will also create a DNS Domain, NFS Server and NFS Export.
-Author: Vish Hulikal
 Usage: nfs.py [-h] -c CLUSTER -a AGGR_NAME, -n NODE_NAME, -vs VSERVER_NAME,
                 i   -v VOLUME_NAME, -ip DATA_LIF, -g GATEWAY, -d DOMAIN, -s SEVER_IP,
                     -nm NET_MASK -se NFS_SERVER, -sh EXPORT_PATH,

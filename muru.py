@@ -4,7 +4,6 @@
 Purpose: Script use the netapp_ontap library.
          It will create a volume and CIFS Share.
          It will also get the NetBIOS information for the cluster.
-Author: Vish Hulikal
 Usage: python3.11 muru.py [-h] -c CLUSTER -a AGGR_NAME -vs VSERVER_NAME, -v VOLUME_NAME -d DOMAIN
                    -s CIFS_SEVER_IP -se CIFS_SERVER -sh CIFS_SHARE -pa PATH [-u API_USER] [-p API_PASS]
 """

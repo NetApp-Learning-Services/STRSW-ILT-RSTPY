@@ -2,7 +2,6 @@
 
 """
 ONTAP 9.7 REST API Python Client Library Scripts
-Author: Vish Hulikal
 This script performs the following:
         - Monitors Volume Metrics
 
